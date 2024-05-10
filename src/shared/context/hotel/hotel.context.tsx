@@ -7,6 +7,7 @@ interface HotelContext {
   hotels: Hotel[];
   hotel: Hotel;
   create: (hotel: Hotel) => void;
+  update: (id: string, hotel: Hotel) => void;
   getHotel: (id: string) => Hotel;
 }
 
@@ -14,6 +15,9 @@ export const hotelContext = React.createContext<HotelContext>({
   hotels: [],
   hotel: {} as Hotel,
   create(hotel) {
+    return;
+  },
+  update(id, hotel) {
     return;
   },
   getHotel(id) {
@@ -34,6 +38,10 @@ export const HotelProvider: FC<Readonly<{ children: ReactNode }>> = ({
     setHotels((prev) => [...prev, hotel]);
   };
 
+  const update = (id: string, hotel: Hotel) => {
+    setHotels((prev) => prev.map((h) => (h.id === id ? hotel : h)));
+  };
+
   const getHotel = (id: string) => {
     const hotel = hotels.find((hotel) => hotel.id === id);
     setHotel(hotel as Hotel);
@@ -51,7 +59,7 @@ export const HotelProvider: FC<Readonly<{ children: ReactNode }>> = ({
   }, []);
 
   return (
-    <hotelContext.Provider value={{ hotels, create, getHotel, hotel }}>
+    <hotelContext.Provider value={{ hotels, create, getHotel, hotel, update }}>
       {children}
     </hotelContext.Provider>
   );

@@ -7,34 +7,37 @@ import { Pagination } from "swiper/modules";
 import Dropdown from "@/shared/ui/molecules/dropdown";
 
 import { FaEllipsisVertical } from "react-icons/fa6";
+import { useHotel } from "@/shared/context/hotel/hotel.context";
 
 export const HotelCard: FC<Hotel & { toggleModal: () => void }> = ({
   name,
   image,
   location,
   id,
+  category,
+  status,
   toggleModal,
 }) => {
   const ref = useRef<any>();
 
-  const [position, setPosition] = useState("bottom start");
+  const [position, setPosition] = useState("bottom end");
 
-  useEffect(() => {
-    if (ref.current) {
-      const pos = ref.current.getBoundingClientRect();
-      if (pos.left < pos.right) {
-        setPosition("bottom end");
-      }
-    }
-  }, [ref]);
+  const { update } = useHotel();
 
   return (
-    <div ref={ref} className="flex flex-col gap-1">
+    <div
+      ref={ref}
+      className={`flex flex-col gap-1 ${
+        status === "disabled" ? "grayscale text-gray-500" : ""
+      }`}
+    >
       <Link href={`/detail/${id}`}>
         <Swiper
           modules={[Pagination]}
           pagination={{ clickable: true }}
-          className="rounded-xl h-40"
+          className={`rounded-xl h-40 ${
+            status === "disabled" ? "opacity-50 blur" : ""
+          }`}
         >
           {image.map((image) => (
             <SwiperSlide key={nanoid()}>
@@ -58,9 +61,16 @@ export const HotelCard: FC<Hotel & { toggleModal: () => void }> = ({
                 },
               },
               {
-                label: "Deshabilitar",
+                label: status === "disabled" ? "Habilitar" : "Deshabilitar",
                 onClick: () => {
-                  console.log("Eliminar");
+                  update(id!, {
+                    name,
+                    image,
+                    location,
+                    id,
+                    category,
+                    status: status === "disabled" ? "enabled" : "disabled",
+                  });
                 },
               },
             ]}

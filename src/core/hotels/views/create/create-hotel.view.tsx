@@ -4,7 +4,7 @@ import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { nanoid } from "nanoid";
 import { useForm } from "react-hook-form";
-import { Hotel } from "../hotel.interfaces";
+import { Hotel } from "../../hotel.interfaces";
 import { useHotel } from "@/shared/context/hotel/hotel.context";
 
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,19 +13,21 @@ import * as yup from "yup";
 const schema = yup
   .object({
     name: yup.string().required("El nombre es requerido"),
+    description: yup.string(),
     location: yup.object().shape({
       city: yup.string().required("La ciudad es requerida"),
       state: yup.string().required("El estado es requerido"),
       country: yup.string().required("El país es requerido"),
       street: yup.string().required("La calle es requerida"),
     }),
-    image: yup
-      .string()
-      .matches(
-        /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/,
-        "La imagen debe ser una url valida"
-      ),
-    category: yup.string(),
+    image: yup.array(
+      yup
+        .string()
+        .matches(
+          /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/,
+          "La imagen debe ser una url valida"
+        )
+    ),
   })
   .required();
 
@@ -40,29 +42,25 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
     getValues,
     setValue,
     formState: { errors, isValid },
-  } = useForm<Hotel>({
-    defaultValues: data,
+    unregister,
+  } = useForm<Hotel & { temp: string }>({
+    defaultValues: { ...data },
     resolver: yupResolver(schema) as any,
   });
 
-  const { create } = useHotel();
+  const { create, update } = useHotel();
 
   const handleAddImage = useCallback(
     (e: React.FormEvent<HTMLButtonElement>) => {
       e.preventDefault();
       const values = getValues();
-      try {
-        const validate =
-          /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/.test(
-            values.image as unknown as string
-          );
-        if (!validate) return;
-        setImages((prev) => [...prev, values.image as unknown as string]);
-        setValue(`image`, "" as unknown as string[]);
-      } catch (error) {
-        console.log(error);
-        return;
-      }
+      const validate =
+        /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/.test(
+          values.temp as unknown as string
+        );
+      if (!validate) return;
+      setImages((prev) => [...prev, values.temp as unknown as string]);
+      setValue(`temp`, "");
     },
     [errors]
   );
@@ -74,17 +72,25 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
   }, [data]);
 
   const onSubmit = useCallback(
-    (data: Hotel) => {
-      console.log(errors);
-      if (!errors) {
-        const form = {
-          ...data,
-          id: nanoid(),
-          image: images,
-        };
-        create(form);
-        toggleModal();
+    (hotel: Hotel) => {
+      if (!Object.entries(errors).length) {
+        if (data.id) {
+          const form = {
+            ...hotel,
+            image: images,
+          };
+
+          update(data.id, form);
+        } else {
+          const form = {
+            ...hotel,
+            id: nanoid(),
+            image: images,
+          };
+          create(form);
+        }
       }
+      toggleModal();
     },
     [images, data, errors]
   );
@@ -98,6 +104,13 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
           error={errors.name?.message}
           placeholder="Colombia"
           {...register("name")}
+        />
+        <Input
+          label="descripción del hotel"
+          error={errors.name?.message}
+          placeholder="Este hotel 6 estrellas tiene 50 habitaciones de la mas alta calidad"
+          type="textarea"
+          {...register("description")}
         />
         <h3>Ubicación</h3>
         <div className="grid grid-cols-3 gap-3">
@@ -144,7 +157,7 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
             placeholder="Agregar url de la imagen"
             className="w-3/4"
             error={errors.image?.message}
-            {...register("image")}
+            {...register("temp")}
           />
           <button
             className="p-2 rounded text-white flex justify-center items-center text-2xl w-1/4"

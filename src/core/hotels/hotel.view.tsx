@@ -5,7 +5,7 @@ import { useHotel } from "@/shared/context/hotel/hotel.context";
 import { useHotelView } from "./hotel.hook";
 import { CategorySlide } from "./components/categories-slide";
 import { Modal } from "@/shared/ui/templates/modal/modal.component";
-import { CreateHotelView } from "./create/create-hotel.view";
+import { CreateHotelView } from "./views/create/create-hotel.view";
 import { Hotel } from "./hotel.interfaces";
 
 export const HotelView = () => {
