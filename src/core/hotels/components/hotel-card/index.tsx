@@ -12,6 +12,7 @@ import { useHotel } from "@/shared/context/hotel/hotel.context";
 export const HotelCard: FC<Hotel & { toggleModal: () => void }> = ({
   name,
   image,
+  description,
   location,
   id,
   category,
@@ -66,6 +67,7 @@ export const HotelCard: FC<Hotel & { toggleModal: () => void }> = ({
                   update(id!, {
                     name,
                     image,
+                    description,
                     location,
                     id,
                     category,
