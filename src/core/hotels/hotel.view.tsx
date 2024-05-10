@@ -14,9 +14,9 @@ export const HotelView = () => {
   const [modalData, setModalData] = useState<Hotel>({} as Hotel);
 
   return (
-    <main className="flex flex-col items-center justify-between">
+    <main className="flex flex-col items-center justify-between ">
       <CategorySlide />
-      <section className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 p-12 lg:grid-cols-4">
+      <section className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 p-12 lg:grid-cols-4 w-full">
         {hotels.map((hotel) => (
           <HotelCard
             key={hotel.id}

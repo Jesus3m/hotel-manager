@@ -1,9 +1,9 @@
 import { useHotel } from "@/shared/context/hotel/hotel.context";
+import { hotels } from "@/shared/services/hotel/consts";
 import { useEffect, useState } from "react";
 
 export const useHotelView = () => {
   const [categories, setCategories] = useState<string[]>([]);
-  const { hotels } = useHotel();
 
   useEffect(() => {
     const categories = new Array(

@@ -26,7 +26,7 @@ const inputs = [
 export const Booking = () => {
   return (
     <>
-      <div className="w-4/5 m-auto flex justify-between items-end px-2 py-2 rounded shadow-lg">
+      {/* <div className="w-4/5 m-auto flex justify-between items-end px-2 py-2 rounded shadow-lg">
         {inputs.map((input) => (
           <div key={input.key} className="relative">
             <label
@@ -48,7 +48,7 @@ export const Booking = () => {
         >
           <FaSistrix />
         </button>
-      </div>
+      </div> */}
       <div className=" bg-gray-300 h-0.5 m-5"></div>
     </>
   );

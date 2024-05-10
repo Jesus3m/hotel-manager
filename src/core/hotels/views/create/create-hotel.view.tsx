@@ -1,5 +1,12 @@
 import { Input } from "@/shared/ui/atoms/input";
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, {
+  FC,
+  FormEvent,
+  KeyboardEventHandler,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { nanoid } from "nanoid";
@@ -42,7 +49,7 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
     getValues,
     setValue,
     formState: { errors, isValid },
-    unregister,
+    watch,
   } = useForm<Hotel & { temp: string }>({
     defaultValues: { ...data },
     resolver: yupResolver(schema) as any,
@@ -95,6 +102,16 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
     [images, data, errors]
   );
 
+  const handleCategory = (e: any) => {
+    console.log(getValues("category"));
+    if (e.key === "Enter" || e.key === ",") {
+      (e as FormEvent<HTMLInputElement>).preventDefault();
+      console.log(e.target.value);
+      setValue("category", [...(getValues("category") || []), e.target.value]);
+      e.currentTarget.value = "";
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-3 py-4 px-2">
@@ -145,10 +162,27 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
           <Input
             type="tag"
             label="Categoría"
-            placeholder="Agregue sus Categorías"
+            placeholder="Agregue sus Categorías (Separadas por coma o enter)"
             error={errors.category?.message}
-            {...register("category")}
+            onChange={handleCategory}
+            onKeyDown={handleCategory}
           />
+          <div className="flex mt-2 gap-1 ">
+            {watch("category")?.map((category) => (
+              <span
+                className="p-1 w-fit rounded bg-slate-200"
+                key={nanoid()}
+                onClick={() =>
+                  setValue(
+                    "category",
+                    getValues("category")?.filter((c) => c !== category)
+                  )
+                }
+              >
+                {category}
+              </span>
+            ))}
+          </div>
         </div>
         <h3>Galería</h3>
         <div className="flex gap-3 w-full">
@@ -169,6 +203,7 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
         </div>
         <div>
           <Swiper
+            className="relative"
             modules={[Navigation]}
             spaceBetween={50}
             slidesPerView={1}
@@ -176,6 +211,14 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
           >
             {images.map((image) => (
               <SwiperSlide key={nanoid()}>
+                <button
+                  className="absolute right-0 top-0 bg-gray-200 p-2 rounded"
+                  onClick={() =>
+                    setImages((prev) => prev.filter((i) => i !== image))
+                  }
+                >
+                  Eliminar
+                </button>
                 <img src={image} className="m-auto w-[50%] object-cover" />
               </SwiperSlide>
             ))}

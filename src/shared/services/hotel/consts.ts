@@ -26,7 +26,7 @@ export const hotels = [
       country: "Colombia",
       street: "Calle 2",
     },
-    category: ["Playa", "Piscina"],
+    category: ["Playa", "Piscina", "Cabaña"],
   },
   {
     name: "Hotel 3",
@@ -78,7 +78,7 @@ export const hotels = [
     image: [
       "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTEzMTA4NjI3OTI1MjIxNDQyOA%3D%3D/original/bc989f2d-eca8-4bcf-a9b0-b70b8e685a64.jpeg?im_w=1440&im_q=highq",
     ],
-
+    category: ["5 Estrellas"],
     location: {
       city: "Barranquilla",
       state: "Atlantico",
