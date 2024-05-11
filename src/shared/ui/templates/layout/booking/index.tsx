@@ -64,10 +64,10 @@ export const Booking = () => {
 
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
-      location: params.get("location"),
-      startDate: params.get("startDate"),
-      endDate: params.get("endDate"),
-      guests: params.get("guests"),
+      location: params.get("location")!,
+      startDate: params.get("startDate")!,
+      endDate: params.get("endDate")!,
+      guests: Number(params.get("guests"))!,
     },
     resolver: yupResolver(schema),
   });
@@ -118,7 +118,7 @@ export const Booking = () => {
               reset({
                 endDate: "",
                 location: "",
-                guests: "",
+                guests: 0,
                 startDate: "",
               });
               push("/booking");
