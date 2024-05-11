@@ -26,16 +26,38 @@ export const GlobalProvider: FC<Readonly<{ children: ReactNode }>> = ({
   const [isAuth, setIsAuth] = useState<Record<string, string> | null>(null);
   const router = useRouter();
   const { mutate: register } = useMutation(userService.create);
+  const { mutate: refresh, data: userAuth } = useMutation(
+    userService.getUserAuth
+  );
   const { mutate: login } = useMutation(userService.login, {
     onSuccess: (data: Record<string, any>) => {
       setIsAuth(data.data);
-      router.push("/");
+      localStorage.setItem("token", data.data.token);
+      if (data.data.role === "admin") {
+        router.push("/");
+      } else {
+        router.push("/booking");
+      }
     },
   });
 
   const logout = () => {
+    localStorage.clear();
     setIsAuth(null);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      refresh({ token });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userAuth?.data) {
+      setIsAuth(userAuth?.data);
+    }
+  }, [userAuth]);
 
   return (
     <globalContext.Provider

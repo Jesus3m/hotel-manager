@@ -5,62 +5,88 @@ import { useHotel } from "@/shared/context/hotel/hotel.context";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { Booking } from "../../booking.interface";
 import { Button } from "@/shared/ui/atoms/button";
+import { Room } from "@/core/hotels/hotel.interfaces";
+import { useGlobal } from "@/shared/context/global.context";
 
 const schema = yup.object({}).required();
 
 export const CreateBookingView: FC<{
-  data: Booking;
+  data: Booking & { room: Room };
   toggleModal: () => void;
 }> = ({ data, toggleModal }) => {
-  const [images, setImages] = useState<string[]>([]);
+  const params = useSearchParams();
+  const { setBooking } = useHotel();
+
+  const { isAuth } = useGlobal();
+
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
     control,
+    setValue,
   } = useForm<Booking & { temp: string }>({
-    defaultValues: { ...data },
+    defaultValues: {
+      ...data,
+      user: isAuth?.user,
+    },
     resolver: yupResolver(schema) as any,
   });
 
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-    {
-      control,
-      name: "guests",
-    }
-  );
-
-  const { id } = useParams();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "guests",
+  });
 
   const onSubmit = useCallback(
     (booking: Booking) => {
-      console.log(booking);
-      console.log(errors);
-      // toggleModal();
+      const room = data.room;
+      delete booking.room;
+      delete booking.hotel;
+      setBooking({
+        ...booking,
+        hotel_id: room?.hotel_id!,
+        room_id: room?._id!,
+        guests: booking.guests.filter((x) => x.document),
+      });
+      toggleModal();
     },
     [data, errors]
   );
+
+  useEffect(() => {
+    setValue("startDate", params.get("startDate") as any);
+    setValue("endDate", params.get("endDate") as any);
+  }, [params]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-3 py-4 px-2">
         <h3>Datos de reserva</h3>
-        <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
           <Input
             label="Hotel"
             type="text"
             disabled
             error={errors?.hotel?.name?.message}
-            {...register("hotel.name")}
+            {...register("room.hotel.name")}
+          />
+          <Input
+            label="Habitación"
+            type="text"
+            disabled
+            error={errors?.hotel?.name?.message}
+            {...register("room.name")}
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
           <Input
             label="Desde"
             type="date"
+            disabled
             error={errors.startDate?.message}
             placeholder="25/12/2022"
             {...register("startDate")}
@@ -68,6 +94,7 @@ export const CreateBookingView: FC<{
           <Input
             label="Hasta"
             type="date"
+            disabled
             error={errors.endDate?.message}
             placeholder="29/12/2022"
             {...register("endDate")}
@@ -83,10 +110,10 @@ export const CreateBookingView: FC<{
           />
           <Input
             label="Apellidos"
-            error={errors.user?.last_name?.message}
+            error={errors.user?.lastName?.message}
             placeholder="Doe"
             type="textarea"
-            {...register("user.last_name")}
+            {...register("user.lastName")}
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
@@ -102,7 +129,7 @@ export const CreateBookingView: FC<{
             label="Email"
             error={errors.user?.email?.message}
             placeholder="hola@hola.com"
-            type="number"
+            type="email"
             {...register("user.email")}
           />
         </div>
@@ -113,7 +140,17 @@ export const CreateBookingView: FC<{
             key={field.id}
             className="p-2 flex flex-col gap-3 border-2 rounded-lg"
           >
-            <h5>Huesped {index + 1}</h5>
+            <div className="w-full flex justify-between">
+              <h5>Huesped {index + 1}</h5>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  remove(index);
+                }}
+              >
+                x
+              </button>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
               <Input
                 label="Nombre"

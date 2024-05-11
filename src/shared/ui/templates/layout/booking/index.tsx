@@ -5,6 +5,8 @@ import React, { useState } from "react";
 import { FaSistrix } from "react-icons/fa6";
 import { nanoid } from "nanoid";
 import { useForm } from "react-hook-form";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 const inputs = [
   {
@@ -38,24 +40,28 @@ const inputs = [
   },
 ];
 export const Booking = () => {
-  const { getHotels, hotels } = useHotel();
+  const { push } = useRouter();
+  const params = useSearchParams();
+  const { hotels } = useHotel();
   const [locations, setLocations] = useState<Location[]>([]);
 
   useState(() => {
     setLocations(hotels!?.map((hotel) => hotel.location));
   });
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: {
+      location: params.get("location"),
+      startDate: params.get("startDate"),
+      endDate: params.get("endDate"),
+      guests: params.get("guests"),
+    },
+  });
 
   const handleFilter = (filter: any) => {
-    getHotels({
-      location: {
-        state: filter.location,
-      },
-      startDate: new Date(filter.startDate),
-      endDate: new Date(filter.endDate),
-      guests: Number(filter.guests),
-    });
+    push(
+      `/booking?location=${filter.location}&startDate=${filter.startDate}&endDate=${filter.endDate}&guests=${filter.guests}`
+    );
   };
 
   return (
@@ -75,7 +81,7 @@ export const Booking = () => {
                 type={input.type}
                 list={input.data?.length ? input.name : undefined}
                 placeholder={input.placeholder}
-                {...register(input.name)}
+                {...register(input.name as any)}
               />
               {locations && (
                 <datalist id={input.name}>
@@ -91,6 +97,22 @@ export const Booking = () => {
             style={{ background: "#de1262" }}
           >
             <FaSistrix />
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              reset({
+                endDate: "",
+                location: "",
+                guests: "",
+                startDate: "",
+              });
+              push("/booking");
+            }}
+            className="p-2 w-full md:w-10 rounded text-white flex justify-center items-center text-2xl"
+            style={{ background: "#de1262" }}
+          >
+            <FaRegTrashCan />
           </button>
         </div>
       </form>

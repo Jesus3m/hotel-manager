@@ -20,6 +20,12 @@ export class UserService extends Service<any> {
 
     return response.data;
   }
+
+  async getUserAuth(data: any, params?: any): Promise<Result<any>> {
+    const response = await AxiosClient.get(`/auth/logged?token=${data.token}`);
+
+    return response.data;
+  }
 }
 
 export default new UserService("/auth");

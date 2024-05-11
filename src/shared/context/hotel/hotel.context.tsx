@@ -4,23 +4,31 @@ import { Hotel, Room } from "@/core/hotels/hotel.interfaces";
 import hotelService from "@/shared/services/hotel/hotel.service";
 import { useMutation, useQuery } from "react-query";
 import roomService from "@/shared/services/room/room.service";
+import bookingService from "@/shared/services/booking/booking.service";
+import { Booking } from "@/core/booking/booking.interface";
 interface HotelContext {
   hotels?: Hotel[];
   hotel: Hotel;
+  rooms: Room[];
   create: (hotel: Hotel) => void;
   update: (_id: string, hotel: Hotel) => void;
   getHotel: (_id: string) => void;
   getHotels: (filter?: Record<string, any>) => void;
+  getRooms: (filter?: Record<string, any>) => void;
   setRoom: (room: Room) => void;
+  setBooking: (booking: Booking) => void;
   categories: any[];
   loadingHotels: boolean;
+  isLoadingRooms: boolean;
 }
 
 export const hotelContext = React.createContext<HotelContext>({
   hotels: [],
+  rooms: [],
   categories: [],
   hotel: {} as Hotel,
   loadingHotels: true,
+  isLoadingRooms: true,
 
   create(hotel) {
     return;
@@ -32,7 +40,11 @@ export const hotelContext = React.createContext<HotelContext>({
     return {} as Hotel;
   },
   getHotels(filter?: Record<string, any>) {},
+  getRooms(filter?: Record<string, any>) {},
   setRoom(room) {
+    return;
+  },
+  setBooking(booking) {
     return;
   },
 });
@@ -48,6 +60,13 @@ export const HotelProvider: FC<Readonly<{ children: ReactNode }>> = ({
     data: hotels,
     isLoading: loadingHotels,
   } = useMutation(hotelService.findAll);
+
+  const {
+    mutate: getRooms,
+    data: rooms,
+    isLoading: isLoadingRooms,
+  } = useMutation(roomService.findAll);
+
   const { mutate: getCategories, data: categories } = useMutation(
     hotelService.getCategories
   );
@@ -68,6 +87,12 @@ export const HotelProvider: FC<Readonly<{ children: ReactNode }>> = ({
       onSuccess: (data) => {
         getById(data.data.hotel_id);
       },
+    }
+  );
+  const { mutate: setBooking, data: bookingCreated } = useMutation(
+    bookingService.create,
+    {
+      onSuccess: (data) => {},
     }
   );
 
@@ -139,6 +164,10 @@ export const HotelProvider: FC<Readonly<{ children: ReactNode }>> = ({
         setRoom,
         categories: categories!,
         loadingHotels,
+        rooms: rooms?.data || [],
+        getRooms,
+        setBooking,
+        isLoadingRooms,
       }}
     >
       {children}

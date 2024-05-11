@@ -1,4 +1,4 @@
-import { Hotel } from "../hotels/hotel.interfaces";
+import { Hotel, Room } from "../hotels/hotel.interfaces";
 
 export interface Booking {
   _id: string;
@@ -7,7 +7,8 @@ export interface Booking {
   hotel_id: string;
   room_id: string;
   user_id: string;
-  hotel: Partial<Hotel>;
+  hotel?: Partial<Hotel>;
+  room?: Partial<Room>;
   guests: {
     name: string;
     lastname: string;
@@ -19,7 +20,7 @@ export interface Booking {
   }[];
   user: {
     name: string;
-    last_name: string;
+    lastName: string;
     phone: string;
     email: string;
   };
