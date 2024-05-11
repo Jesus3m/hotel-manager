@@ -1,15 +1,12 @@
-import React, { FormEvent } from "react";
+import React, { ButtonHTMLAttributes, FC, FormEvent } from "react";
 
-export const Button = ({
-  children,
-  onClick,
-}: {
-  children: React.ReactNode;
-  onClick: (e: FormEvent<HTMLButtonElement>) => void;
-}) => {
+export const Button: FC<
+  ButtonHTMLAttributes<HTMLButtonElement> & { children: React.ReactNode }
+> = ({ children, onClick, ...props }) => {
   return (
     <button
-      className="p-2 shadow-xl rounded text-white flex justify-center items-center"
+      {...props}
+      className={`p-2 shadow-xl rounded text-white flex justify-center items-center ${props.className}`}
       style={{ background: "#de1262" }}
       onClick={onClick}
     >

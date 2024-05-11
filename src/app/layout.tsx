@@ -8,6 +8,7 @@ import { Layout } from "@/shared/ui/templates/layout";
 import { HotelProvider } from "@/shared/context/hotel/hotel.context";
 import { QueryClientProvider } from "react-query";
 import { queryClient } from "@/shared/services/client";
+import { GlobalProvider } from "@/shared/context/global.context";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -17,13 +18,15 @@ export default function RootLayout({
 }>) {
   return (
     <QueryClientProvider client={queryClient}>
-      <html lang="es">
-        <body className={inter.className}>
-          <HotelProvider>
-            <Layout>{children}</Layout>
-          </HotelProvider>
-        </body>
-      </html>
+      <GlobalProvider>
+        <html lang="es">
+          <body className={inter.className}>
+            <HotelProvider>
+              <Layout>{children}</Layout>
+            </HotelProvider>
+          </body>
+        </html>
+      </GlobalProvider>
     </QueryClientProvider>
   );
 }
