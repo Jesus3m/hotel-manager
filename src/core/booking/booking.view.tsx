@@ -32,7 +32,7 @@ export const BookingView = () => {
         </div>
 
         <ul role="list" className="divide-y divide-gray-100 w-full my-4">
-          {hotel.rooms && hotel.rooms.length ? (
+          {/* {hotel.rooms && hotel.rooms.length ? (
             hotel.rooms.map((booking) => (
               <li
                 key={booking.location}
@@ -115,7 +115,7 @@ export const BookingView = () => {
             ))
           ) : (
             <h3>Aun no cuentas con reservas disponibles</h3>
-          )}
+          )} */}
         </ul>
       </div>
       <Modal

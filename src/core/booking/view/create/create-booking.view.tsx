@@ -162,7 +162,7 @@ export const CreateBookingView: FC<{
           <Button
             onClick={(e) => {
               e.preventDefault();
-              append({});
+              append({} as any);
             }}
           >
             Agregar Huésped
