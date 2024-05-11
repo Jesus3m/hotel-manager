@@ -7,7 +7,20 @@ import { nanoid } from "nanoid";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FaRegTrashCan } from "react-icons/fa6";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
+const schema = yup
+  .object({
+    location: yup.string().required("El nombre es requerido"),
+    startDate: yup.string().required("Fecha es requerida"),
+    endDate: yup.string().required("Fecha es requerida"),
+    guests: yup
+      .number()
+      .min(1, "El número de personas debe ser mayor a 0")
+      .required("El número de personas es requerido"),
+  })
+  .required();
 const inputs = [
   {
     placeholder: "Explora destinos",
@@ -56,6 +69,7 @@ export const Booking = () => {
       endDate: params.get("endDate"),
       guests: params.get("guests"),
     },
+    resolver: yupResolver(schema),
   });
 
   const handleFilter = (filter: any) => {

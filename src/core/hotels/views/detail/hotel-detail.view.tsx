@@ -1,14 +1,9 @@
 "use client";
 import { useHotel } from "@/shared/context/hotel/hotel.context";
 import { useParams } from "next/navigation";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { nanoid } from "nanoid";
-import { Button } from "@/shared/ui/atoms/button";
-import { RoomView } from "../room/room.view";
-import { Modal } from "@/shared/ui/templates/modal/modal.component";
-import { CreateRoomView } from "../room/create/create-room.view";
-import { Room } from "../../hotel.interfaces";
 
 export const HotelDetailView = () => {
   const { id: _id } = useParams();

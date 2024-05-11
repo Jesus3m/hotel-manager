@@ -11,7 +11,7 @@ const routes = [
     name: "Hoteles",
   },
   {
-    path: "/booking",
+    path: "/booking/admin",
     name: "Reservas",
   },
 ];
@@ -21,7 +21,11 @@ export const Navigation = () => {
   return (
     <nav className="flex justify-between bg-white p-4 gap-2 border-b-2 mb-4">
       <div>
-        <Link href={"/"} className="font-bold" style={{ color: "#de1262" }}>
+        <Link
+          href={isAuth?.role === "admin" ? "/" : "/booking"}
+          className="font-bold"
+          style={{ color: "#de1262" }}
+        >
           Hotel Manager
         </Link>
       </div>

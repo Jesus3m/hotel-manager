@@ -25,7 +25,11 @@ export const GlobalProvider: FC<Readonly<{ children: ReactNode }>> = ({
 }) => {
   const [isAuth, setIsAuth] = useState<Record<string, string> | null>(null);
   const router = useRouter();
-  const { mutate: register } = useMutation(userService.create);
+  const { mutate: register } = useMutation(userService.create, {
+    onSuccess: () => {
+      router.push("/auth/login");
+    },
+  });
   const { mutate: refresh, data: userAuth } = useMutation(
     userService.getUserAuth
   );

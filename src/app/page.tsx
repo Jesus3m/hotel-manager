@@ -1,9 +1,18 @@
+"use client";
 import { HotelView } from "@/core/hotels/hotel.view";
-import { HotelProvider } from "@/shared/context/hotel/hotel.context";
-import Image from "next/image";
-import { Suspense } from "react";
+import { useGlobal } from "@/shared/context/global.context";
+import { useRouter } from "next/navigation";
+import { Suspense, useEffect } from "react";
 
 export default function Home() {
+  const { isAuth } = useGlobal();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuth && isAuth?.role !== "admin") {
+      router.push("/booking");
+    }
+  }, [isAuth]);
   return (
     <Suspense>
       <HotelView></HotelView>

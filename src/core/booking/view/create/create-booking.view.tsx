@@ -15,8 +15,9 @@ const schema = yup.object({}).required();
 
 export const CreateBookingView: FC<{
   data: Booking & { room: Room };
+  viewMode: boolean;
   toggleModal: () => void;
-}> = ({ data, toggleModal }) => {
+}> = ({ data, toggleModal, viewMode }) => {
   const params = useSearchParams();
   const { setBooking } = useHotel();
 
@@ -43,6 +44,7 @@ export const CreateBookingView: FC<{
 
   const onSubmit = useCallback(
     (booking: Booking) => {
+      if (viewMode) return;
       const room = data.room;
       delete booking.room;
       delete booking.hotel;
@@ -195,26 +197,30 @@ export const CreateBookingView: FC<{
             </div>
           </div>
         ))}
-        <div>
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              append({} as any);
-            }}
-          >
-            Agregar Huésped
-          </Button>
-        </div>
+        {!viewMode && (
+          <div>
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                append({} as any);
+              }}
+            >
+              Agregar Huésped
+            </Button>
+          </div>
+        )}
 
-        <div className="flex justify-end w-full">
-          <button
-            style={{ background: "#de1262" }}
-            className="p-2 rounded text-white w-max"
-            type="submit"
-          >
-            Guardar Booking
-          </button>
-        </div>
+        {!viewMode && (
+          <div className="flex justify-end w-full">
+            <button
+              style={{ background: "#de1262" }}
+              className="p-2 rounded text-white w-max"
+              type="submit"
+            >
+              Guardar Booking
+            </button>
+          </div>
+        )}
       </div>
     </form>
   );

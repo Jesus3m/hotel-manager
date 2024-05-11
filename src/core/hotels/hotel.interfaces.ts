@@ -1,3 +1,5 @@
+import { Booking } from "../booking/booking.interface";
+
 export interface Hotel {
   _id?: string;
   description?: string;
@@ -7,6 +9,7 @@ export interface Hotel {
   category?: string[];
   status?: string;
   rooms?: Room[];
+  bookings?: Booking[];
 }
 
 export interface Room {

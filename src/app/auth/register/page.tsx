@@ -1,14 +1,35 @@
 "use client";
-import { HotelView } from "@/core/hotels/hotel.view";
 import { useGlobal } from "@/shared/context/global.context";
 import { Button } from "@/shared/ui/atoms/button";
 import { Input } from "@/shared/ui/atoms/input";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
+import * as yup from "yup";
 import { useForm } from "react-hook-form";
 
+const schema = yup
+  .object({
+    name: yup.string().required("El nombre es requerido"),
+    lastName: yup.string().required("El apellido es requerido"),
+    email: yup.string().required("El email es requerido"),
+    password: yup
+      .string()
+      .min(6, "La contraseña debe tener al menos 6 caracteres")
+      .required("La contraseña es requerida")
+      .required("La contraseña es requerida"),
+    terms: yup.bool().oneOf([true], "Debes aceptar los términos y condiciones"),
+  })
+  .required();
 export default function Register() {
   const { register: registerUser } = useGlobal();
-  const { handleSubmit, register } = useForm();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   return (
     <section className=" dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-[calc(100vh-5rem)] lg:py-0">
@@ -26,12 +47,14 @@ export default function Register() {
                   type="text"
                   label="Tu nombre"
                   placeholder="John"
+                  error={errors.name?.message}
                   {...register("name")}
                 />
                 <Input
                   type="text"
                   label="Tu apellido"
                   placeholder="Doe"
+                  error={errors.lastName?.message}
                   {...register("lastName")}
                 />
               </div>
@@ -41,6 +64,7 @@ export default function Register() {
                   id="email"
                   label="Tu email"
                   placeholder="name@company.com"
+                  error={errors.email?.message}
                   {...register("email")}
                 />
               </div>
@@ -50,6 +74,7 @@ export default function Register() {
                   label="Tu contraseña"
                   id="password"
                   placeholder="••••••••"
+                  error={errors.password?.message}
                   {...register("password")}
                 />
               </div>

@@ -9,11 +9,13 @@ import { Booking } from "@/core/booking/booking.interface";
 interface HotelContext {
   hotels?: Hotel[];
   hotel: Hotel;
+  bookings: Booking[];
   rooms: Room[];
   create: (hotel: Hotel) => void;
   update: (_id: string, hotel: Hotel) => void;
   getHotel: (_id: string) => void;
   getHotels: (filter?: Record<string, any>) => void;
+  getBookings: (filter?: Record<string, any>) => void;
   getRooms: (filter?: Record<string, any>) => void;
   setRoom: (room: Room) => void;
   setBooking: (booking: Booking) => void;
@@ -24,6 +26,7 @@ interface HotelContext {
 
 export const hotelContext = React.createContext<HotelContext>({
   hotels: [],
+  bookings: [],
   rooms: [],
   categories: [],
   hotel: {} as Hotel,
@@ -40,6 +43,7 @@ export const hotelContext = React.createContext<HotelContext>({
     return {} as Hotel;
   },
   getHotels(filter?: Record<string, any>) {},
+  getBookings(filter?: Record<string, any>) {},
   getRooms(filter?: Record<string, any>) {},
   setRoom(room) {
     return;
@@ -69,6 +73,10 @@ export const HotelProvider: FC<Readonly<{ children: ReactNode }>> = ({
 
   const { mutate: getCategories, data: categories } = useMutation(
     hotelService.getCategories
+  );
+
+  const { mutate: getBookings, data: bookings } = useMutation(
+    bookingService.findAll
   );
 
   const { mutate: createHotel, data: hotelCreated } = useMutation(
@@ -168,6 +176,8 @@ export const HotelProvider: FC<Readonly<{ children: ReactNode }>> = ({
         getRooms,
         setBooking,
         isLoadingRooms,
+        bookings: bookings?.data || [],
+        getBookings,
       }}
     >
       {children}
