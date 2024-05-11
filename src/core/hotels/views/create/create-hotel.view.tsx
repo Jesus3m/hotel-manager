@@ -103,7 +103,6 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
   );
 
   const handleCategory = (e: any) => {
-    console.log(getValues("category"));
     if (e.key === "Enter" || e.key === ",") {
       (e as FormEvent<HTMLInputElement>).preventDefault();
       console.log(e.target.value);

@@ -1,12 +1,7 @@
 "use client";
-import { Button } from "@/shared/ui/atoms/button";
-import { Modal } from "@/shared/ui/templates/modal/modal.component";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useHotel } from "@/shared/context/hotel/hotel.context";
-import { Booking as BookingData } from "./booking.interface";
-import { CreateBookingView } from "./view/create/create-booking.view";
 import { useSearchParams } from "next/navigation";
-import { CategorySlide } from "../hotels/components/categories-slide";
 import { Booking } from "@/shared/ui/templates/layout/booking";
 import { BookingCard } from "./components/booking-card";
 import { CardSkeleton } from "./components/booking-card/skeleton";

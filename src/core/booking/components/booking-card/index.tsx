@@ -37,7 +37,7 @@ export const BookingCard: FC<Room> = ({ ...room }) => {
               room.status === "disabled" ? "opacity-50 blur" : ""
             }`}
           >
-            {room?.hotel?.image.map((image) => (
+            {room?.hotel?.image?.map((image) => (
               <SwiperSlide key={nanoid()}>
                 <img
                   src={image}

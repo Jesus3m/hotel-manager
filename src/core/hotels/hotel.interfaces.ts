@@ -17,7 +17,7 @@ export interface Room {
   name: string;
   type: string;
   taxes: number;
-  hotel?: Hotel;
+  hotel?: Partial<Hotel>;
   allowedGuests?: number;
   status?: string;
 }
