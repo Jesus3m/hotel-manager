@@ -10,7 +10,6 @@ export const Layout: FC<
   return (
     <main>
       <Navigation />
-      <Booking />
       {children}
     </main>
   );

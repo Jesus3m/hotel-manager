@@ -1,3 +1,4 @@
+"use client";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { Hotel } from "../../hotel.interfaces";
 import Link from "next/link";
@@ -8,13 +9,14 @@ import Dropdown from "@/shared/ui/molecules/dropdown";
 
 import { FaEllipsisVertical } from "react-icons/fa6";
 import { useHotel } from "@/shared/context/hotel/hotel.context";
-
+import { useParams, useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 export const HotelCard: FC<Hotel & { toggleModal: () => void }> = ({
   name,
   image,
   description,
   location,
-  id,
+  _id,
   category,
   status,
   toggleModal,
@@ -22,6 +24,7 @@ export const HotelCard: FC<Hotel & { toggleModal: () => void }> = ({
   const ref = useRef<any>();
 
   const [position, setPosition] = useState("bottom end");
+  const { push } = useRouter();
 
   const { update } = useHotel();
 
@@ -32,7 +35,7 @@ export const HotelCard: FC<Hotel & { toggleModal: () => void }> = ({
         status === "disabled" ? "grayscale text-gray-500" : ""
       }`}
     >
-      <Link href={`/detail/${id}`}>
+      <Link href={`/detail/${_id}`}>
         <Swiper
           modules={[Pagination]}
           pagination={{ clickable: true }}
@@ -64,15 +67,21 @@ export const HotelCard: FC<Hotel & { toggleModal: () => void }> = ({
               {
                 label: status === "disabled" ? "Habilitar" : "Deshabilitar",
                 onClick: () => {
-                  update(id!, {
+                  update(_id!, {
                     name,
                     image,
                     description,
                     location,
-                    id,
+                    _id,
                     category,
                     status: status === "disabled" ? "enabled" : "disabled",
                   });
+                },
+              },
+              {
+                label: "Ver habitaciones",
+                onClick: () => {
+                  push(`/detail/${_id}/rooms`);
                 },
               },
             ]}

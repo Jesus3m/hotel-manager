@@ -9,6 +9,7 @@ import { useHotel } from "@/shared/context/hotel/hotel.context";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Room } from "@/core/hotels/hotel.interfaces";
+import { useParams } from "next/navigation";
 
 const schema = yup
   .object({
@@ -39,10 +40,12 @@ export const CreateRoomView: FC<{
 
   const { setRoom } = useHotel();
 
+  const { id } = useParams();
+
   const onSubmit = useCallback(
     (room: Room) => {
       if (!Object.entries(errors).length) {
-        setRoom(room);
+        setRoom({ ...room, hotel_id: id as string });
       }
       toggleModal();
     },

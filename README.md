@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Gestor de Hoteles, Habitaciones y Reservas
 
-## Getting Started
+Este proyecto es un sistema de gestión de hoteles, habitaciones y reservas que permite a los usuarios listar, crear, editar y deshabilitar hoteles y habitaciones, así como también realizar reservas para las habitaciones disponibles.
 
-First, run the development server:
+## Características principales
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Gestión de Hoteles:** Los usuarios pueden listar, crear, editar y deshabilitar hoteles. Cada hotel puede tener asignada una galería de imágenes.
+  
+- **Gestión de Habitaciones:** Es posible asignar varias habitaciones a cada hotel. Los usuarios pueden editar y deshabilitar las habitaciones según sea necesario.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Filtros Avanzados:** Los usuarios pueden filtrar los hoteles por destino, fechas de entrada y salida, y cantidad de huéspedes.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Reservas:** Los usuarios pueden realizar reservas para las habitaciones disponibles.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Tecnologías Utilizadas
 
-## Learn More
+- **Lenguaje de Programación:** Node.js
+  
+- **Framework:** Next.js
+  
+- **Base de Datos:** LocalStorage (para almacenamiento local temporal)
 
-To learn more about Next.js, take a look at the following resources:
+- **Frontend:** React
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Instalación
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. Clona este repositorio en tu máquina local.
+2. Instala las dependencias necesarias (`npm install`).
+3. Ejecuta el servidor localmente (`npm run dev`).
 
-## Deploy on Vercel
+## Contribuciones
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Las contribuciones son bienvenidas. Si deseas contribuir al proyecto, sigue estos pasos:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Haz un fork del repositorio.
+2. Crea una nueva rama para tus cambios (`git checkout -b feature/nueva-caracteristica`).
+3. Realiza tus cambios y haz commit de ellos (`git commit -am 'Agrega nueva característica'`).
+4. Haz push a la rama (`git push origin feature/nueva-caracteristica`).
+5. Abre un pull request.
+
+## Autores
+
+Jesus Manuel Moreno Mantilla
+
+## Licencia
+
+MIT License

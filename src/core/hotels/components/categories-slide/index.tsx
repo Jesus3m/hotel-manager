@@ -4,37 +4,28 @@ import {
   FaAnchor,
   FaAddressBook,
   FaAirbnb,
-  FaAngleRight,
   FaAdn,
   FaAdversal,
   FaAlgolia,
   FaAudioDescription,
   FaBatteryEmpty,
 } from "react-icons/fa";
+import * as IconsGallery from "react-icons/ai";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, Navigation } from "swiper/modules";
-import { useHotelView } from "../../hotel.hook";
 import { useHotel } from "@/shared/context/hotel/hotel.context";
 
-const Icons = [
-  FaAnchor,
-  FaAddressBook,
-  FaAirbnb,
-  FaAngleRight,
-  FaAdn,
-  FaAdversal,
-  FaAlgolia,
-  FaAudioDescription,
-  FaBatteryEmpty,
-];
-export const CategorySlide = () => {
-  const { categories } = useHotelView();
-  const { getHotels } = useHotel();
+const Icons = Object.entries(IconsGallery)
+  .slice(0, 100)
+  .map((x) => x[1]);
 
-  const getIcon = (category: string) => {
-    const Icon = Icons[(Math.random() * Icons.length) | 0];
-    return <Icon />;
-  };
+const getIcon = (i: number) => {
+  const Icon = Icons[i];
+  return <Icon />;
+};
+
+export const CategorySlide = () => {
+  const { getHotels, categories } = useHotel();
 
   const handleClick = (category: string) => {
     if (category === "Todos") {
@@ -66,18 +57,18 @@ export const CategorySlide = () => {
             className="flex gap-1 text-center flex-col items-center text-gray-700 hover:text-black cursor-pointer text-ellipsis h-1"
             onClick={() => handleClick("Todos")}
           >
-            <span>{getIcon("All")}</span>
+            <span>{getIcon(1)}</span>
             <span>{"Todos"}</span>
           </div>
         </SwiperSlide>
-        {categories.map((category) => (
+        {categories?.map((category, i) => (
           <SwiperSlide key={nanoid()}>
             <div
               className="flex gap-1 text-center flex-col items-center text-gray-700 hover:text-black cursor-pointer text-ellipsis h-1"
               onClick={() => handleClick(category)}
             >
-              <span>{getIcon(category)}</span>
-              <span>{category}</span>
+              <span>{getIcon(i)}</span>
+              <span>{category._id}</span>
             </div>
           </SwiperSlide>
         ))}

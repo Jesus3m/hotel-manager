@@ -81,17 +81,17 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
   const onSubmit = useCallback(
     (hotel: Hotel) => {
       if (!Object.entries(errors).length) {
-        if (data.id) {
+        if (data._id) {
           const form = {
             ...hotel,
             image: images,
           };
 
-          update(data.id, form);
+          update(data._id, form);
         } else {
           const form = {
             ...hotel,
-            id: nanoid(),
+            _id: nanoid(),
             image: images,
           };
           create(form);

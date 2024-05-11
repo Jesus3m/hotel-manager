@@ -1,5 +1,5 @@
 export interface Hotel {
-  id?: string;
+  _id?: string;
   description?: string;
   name: string;
   image: string[];
@@ -10,7 +10,8 @@ export interface Hotel {
 }
 
 export interface Room {
-  id?: string;
+  _id?: string;
+  hotel_id: string;
   location: string;
   cost: number;
   name: string;

@@ -2,21 +2,26 @@
 import React, { FC, ReactNode, useContext, useEffect } from "react";
 import { Hotel, Room } from "@/core/hotels/hotel.interfaces";
 import hotelService from "@/shared/services/hotel/hotel.service";
-import { hotels as hotelData } from "@/shared/services/hotel/consts";
-import { nanoid } from "nanoid";
+import { useMutation, useQuery } from "react-query";
+import roomService from "@/shared/services/room/room.service";
 interface HotelContext {
-  hotels: Hotel[];
+  hotels?: Hotel[];
   hotel: Hotel;
   create: (hotel: Hotel) => void;
-  update: (id: string, hotel: Hotel) => void;
-  getHotel: (id: string) => Hotel;
-  getHotels: (filter?: Record<string, any>) => Hotel[];
+  update: (_id: string, hotel: Hotel) => void;
+  getHotel: (_id: string) => void;
+  getHotels: (filter?: Record<string, any>) => void;
   setRoom: (room: Room) => void;
+  categories: any[];
+  loadingHotels: boolean;
 }
 
 export const hotelContext = React.createContext<HotelContext>({
   hotels: [],
+  categories: [],
   hotel: {} as Hotel,
+  loadingHotels: true,
+
   create(hotel) {
     return;
   },
@@ -26,9 +31,7 @@ export const hotelContext = React.createContext<HotelContext>({
   getHotel(id) {
     return {} as Hotel;
   },
-  getHotels(filter?: Record<string, any>) {
-    return [];
-  },
+  getHotels(filter?: Record<string, any>) {},
   setRoom(room) {
     return;
   },
@@ -40,69 +43,103 @@ export const useHotel = () => {
 export const HotelProvider: FC<Readonly<{ children: ReactNode }>> = ({
   children,
 }) => {
-  const [hotels, setHotels] = React.useState<Hotel[]>([]);
-  const [hotel, setHotel] = React.useState<Hotel>({} as Hotel);
+  const {
+    mutate: getAll,
+    data: hotels,
+    isLoading: loadingHotels,
+  } = useMutation(hotelService.findAll);
+  const { mutate: getCategories, data: categories } = useMutation(
+    hotelService.getCategories
+  );
+
+  const { mutate: createHotel, data: hotelCreated } = useMutation(
+    hotelService.create,
+    {
+      onSuccess: (data) => {
+        getAll({});
+        getCategories();
+      },
+    }
+  );
+
+  const { mutate: createRoom, data: roomCreated } = useMutation(
+    roomService.create,
+    {
+      onSuccess: (data) => {
+        getById(data.data.hotel_id);
+      },
+    }
+  );
+
+  const { mutate: updateRoom, data: roomUpdated } = useMutation(
+    (args: any) => roomService.update(args._id, args),
+    {
+      onSuccess: (data) => {
+        getById(data.data.hotel_id);
+      },
+    }
+  );
+
+  const { mutate: updateHotel, data: hotelUpdate } = useMutation(
+    (args: any) => hotelService.update(args._id, args),
+    {
+      onSuccess: (data) => {
+        getAll({});
+        getCategories();
+      },
+    }
+  );
+
+  const { data: hotel, mutate: getById } = useMutation(hotelService.get);
 
   const create = (hotel: Hotel) => {
-    setHotels((prev) => [...prev, hotel]);
+    createHotel(hotel);
   };
 
-  const update = (id: string, hotel: Hotel) => {
-    setHotels((prev) => prev.map((h) => (h.id === id ? hotel : h)));
-    setHotel(hotel);
+  const update = (_id: string, hotel: Hotel) => {
+    updateHotel({ ...hotel } as any);
   };
 
-  const getHotel = (id: string) => {
-    const hotel = hotels.find((hotel) => hotel.id === id);
-    setHotel(hotel as Hotel);
-    return hotel as Hotel;
+  const getHotel = (_id: string) => {
+    getById(_id);
   };
 
   const getHotels = (filter?: Record<string, any>) => {
-    if (!filter) {
-      setHotels(hotelData as Hotel[]);
-      return [];
-    }
-    const filterHotels = hotelData.filter((h) => {
-      if (filter?.category && !h?.category?.includes(filter.category)) {
-        return false;
-      }
-      return true;
-    });
-
-    setHotels(filterHotels as Hotel[]);
-    return filterHotels as Hotel[];
+    getAll({ ...filter });
   };
 
   const setRoom = (room: Room) => {
-    if (hotel.id) {
-      if (room.id) {
-        update(hotel.id, {
-          ...hotel,
-          rooms: hotel.rooms?.map((r) => (r.id === room.id ? room : r)),
+    if (hotel?.data && hotel?.data._id) {
+      if (room._id) {
+        updateRoom({
+          ...room,
         });
       } else {
-        update(hotel.id, {
-          ...hotel,
-          rooms: [...(hotel.rooms || []), { ...room, id: nanoid() }],
+        createRoom({
+          ...room,
         });
       }
     }
   };
 
   useEffect(() => {
-    if (hotels.length > 0) {
-      localStorage.setItem("hotels", JSON.stringify(hotels));
-    }
-  }, [hotels]);
-
-  useEffect(() => {
-    setHotels(hotelService.getHotels());
+    getAll({});
+    getCategories();
   }, []);
 
   return (
     <hotelContext.Provider
-      value={{ hotels, create, getHotel, hotel, update, getHotels, setRoom }}
+      value={{
+        hotels: hotels?.data,
+        create,
+        getHotel,
+        hotel: hotel?.data || ({} as Hotel),
+        update,
+        getHotels,
+        setRoom,
+        categories: categories!,
+        loadingHotels,
+      }}
     >
       {children}
     </hotelContext.Provider>

@@ -46,7 +46,6 @@ export default function Dropdown({
               <MenuItem key={nanoid()}>
                 {({ active }) => (
                   <a
-                    href="#"
                     onClick={option.onClick}
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",

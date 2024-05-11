@@ -11,12 +11,12 @@ import { CreateRoomView } from "../room/create/create-room.view";
 import { Room } from "../../hotel.interfaces";
 
 export const HotelDetailView = () => {
-  const { id } = useParams();
+  const { id: _id } = useParams();
 
   const { getHotel, hotel, hotels } = useHotel();
   useEffect(() => {
-    getHotel(id as string);
-  }, [id, hotels]);
+    getHotel(_id as string);
+  }, [_id, hotels]);
 
   return (
     <>
