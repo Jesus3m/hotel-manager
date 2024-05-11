@@ -8,7 +8,6 @@ import { CreateHotelView } from "./views/create/create-hotel.view";
 import { Hotel } from "./hotel.interfaces";
 import { Booking } from "@/shared/ui/templates/layout/booking";
 import { CardSkeleton } from "./components/hotel-card/skeleton";
-import { AnimatePresence } from "framer-motion";
 
 export const HotelView = () => {
   const { hotels, loadingHotels } = useHotel();

@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import { FaSistrix } from "react-icons/fa6";
 import { nanoid } from "nanoid";
 import { useForm } from "react-hook-form";
-import { hotels as hotelData } from "@/shared/services/hotel/consts";
 
 const inputs = [
   {
@@ -39,11 +38,11 @@ const inputs = [
   },
 ];
 export const Booking = () => {
-  const { getHotels } = useHotel();
+  const { getHotels, hotels } = useHotel();
   const [locations, setLocations] = useState<Location[]>([]);
 
   useState(() => {
-    setLocations(hotelData.map((hotel) => hotel.location));
+    setLocations(hotels!?.map((hotel) => hotel.location));
   });
 
   const { register, handleSubmit } = useForm();
