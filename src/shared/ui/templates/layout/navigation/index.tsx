@@ -22,7 +22,7 @@ export const Navigation = () => {
     <nav className="flex justify-between bg-white p-4 gap-2 border-b-2 mb-4">
       <div>
         <Link
-          href={isAuth?.role === "admin" ? "/" : "/booking"}
+          href={isAuth?.user.role === "admin" ? "/" : "/booking"}
           className="font-bold"
           style={{ color: "#de1262" }}
         >
@@ -31,7 +31,7 @@ export const Navigation = () => {
       </div>
       <div className="flex gap-2 items-center">
         <div className="flex gap-2">
-          {isAuth?.role === "admin" &&
+          {isAuth?.user.role === "admin" &&
             routes.map((route) => (
               <Link
                 className="hover:bg-slate-100 hover:text-slate-950 py-2 px-5 rounded"

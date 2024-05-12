@@ -1,7 +1,7 @@
 "use client";
 import { Location } from "@/core/hotels/hotel.interfaces";
 import { useHotel } from "@/shared/context/hotel/hotel.context";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaSistrix } from "react-icons/fa6";
 import { nanoid } from "nanoid";
 import { useForm } from "react-hook-form";
@@ -9,6 +9,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { FaRegTrashCan } from "react-icons/fa6";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { ReactSearchAutocomplete } from "react-search-autocomplete";
+import { useQuery } from "react-query";
+import axios from "axios";
 
 const schema = yup
   .object({
@@ -28,7 +31,7 @@ const inputs = [
     type: "text",
     label: "Donde",
     name: "location",
-    data: ["a", "b", "c"],
+    autocomplete: true,
   },
   {
     placeholder: "dd/mm/yyy",
@@ -52,17 +55,40 @@ const inputs = [
     label: "Personas",
   },
 ];
+
+const items = [
+  {
+    id: 0,
+    name: "Cobol",
+  },
+  {
+    id: 1,
+    name: "JavaScript",
+  },
+  {
+    id: 2,
+    name: "Basic",
+  },
+  {
+    id: 3,
+    name: "PHP",
+  },
+  {
+    id: 4,
+    name: "Java",
+  },
+];
 export const Booking = () => {
   const { push } = useRouter();
   const params = useSearchParams();
-  const { hotels } = useHotel();
-  const [locations, setLocations] = useState<Location[]>([]);
 
-  useState(() => {
-    setLocations(hotels!?.map((hotel) => hotel.location));
-  });
+  const { data: cities } = useQuery(
+    "cities",
+    async () => (await axios.get("https://api-colombia.com/api/v1/City")).data,
+    {}
+  );
 
-  const { register, handleSubmit, reset } = useForm({
+  const { register, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
       location: params.get("location")!,
       startDate: params.get("startDate")!,
@@ -78,34 +104,56 @@ export const Booking = () => {
     );
   };
 
+  const handleOnSelect = (item: any) => {
+    setValue("location", item.name);
+  };
+
+  const formatResult = (item: any) => {
+    return (
+      <>
+        <span style={{ display: "block", textAlign: "left" }}>{item.name}</span>
+      </>
+    );
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit(handleFilter)}>
-        <div className="w-4/5 m-auto flex flex-col justify-between items-end px-2 py-2 rounded shadow-none md:shadow-lg md:flex-row gap-4 border-t-2">
-          {inputs.map((input) => (
-            <div key={input.key} className="relative w-full">
-              <label
-                className="absolute font-bold text-xs translate-y-[-10px]"
+        <div className="w-4/5 m-auto flex flex-col justify-between items-end px-2 py-2 rounded shadow-none md:shadow-lg md:flex-row gap-4">
+          {inputs.map((input) =>
+            !input.autocomplete ? (
+              <div key={input.key} className="relative w-full">
+                <label
+                  className="absolute font-bold text-xs translate-y-[-10px]"
+                  key={input.key}
+                >
+                  {input.label}
+                </label>
+                <input
+                  className="bg-gray-50 md:bg-white p-2 md:p-1 outline-none w-full shadow-sm md:shadow-none "
+                  type={input.type}
+                  placeholder={input.placeholder}
+                  {...register(input.name as any)}
+                />
+              </div>
+            ) : (
+              <ReactSearchAutocomplete
                 key={input.key}
-              >
-                {input.label}
-              </label>
-              <input
-                className="bg-gray-50 md:bg-white p-2 md:p-1 outline-none w-full shadow-sm md:shadow-none "
-                type={input.type}
-                list={input.data?.length ? input.name : undefined}
-                placeholder={input.placeholder}
-                {...register(input.name as any)}
+                items={cities}
+                className="w-full border-none z-10"
+                placeholder="Donde?"
+                styling={{
+                  borderRadius: "0px",
+                  border: "none",
+                  boxShadow: "none",
+                  backgroundColor: "white",
+                }}
+                onSelect={handleOnSelect}
+                autoFocus
+                formatResult={formatResult}
               />
-              {locations && (
-                <datalist id={input.name}>
-                  {locations.map((item) => (
-                    <option key={nanoid()} value={`${item.city}`} />
-                  ))}
-                </datalist>
-              )}
-            </div>
-          ))}
+            )
+          )}
           <button
             className="p-2 w-full md:w-10 rounded text-white flex justify-center items-center text-2xl"
             style={{ background: "#de1262" }}

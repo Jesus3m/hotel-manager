@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { nanoid } from "nanoid";
+import { AnimatePresence, motion } from "framer-motion";
 export interface Modal {
   isOpen: boolean;
   children: React.ReactNode;
@@ -23,12 +24,22 @@ export const Modal = ({ children, isOpen, onClose, actions, title }: Modal) => {
   return state ? (
     createPortal(
       isOpen && (
-        <>
-          <section
+        <AnimatePresence mode="popLayout">
+          <motion.section
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             onClick={onClose}
             className="fixed top-0 left-0 right-0 bottom-0 w-full h-full bg-black bg-opacity-40 flex justify-center items-center z-10 "
-          ></section>
-          <div className="absolute w-3/4 left-0 right-0 bottom-0 top-0 m-auto h-max max-h-[90vh] bg-white rounded-lg p-4 z-20 overflow-hidden">
+          ></motion.section>
+          <motion.div
+            layout
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            transition={{ type: "spring" }}
+            className="absolute w-3/4 left-0 right-0 bottom-0 top-0 m-auto h-max max-h-[90vh] bg-white rounded-lg p-4 z-20 overflow-hidden"
+          >
             {title && (
               <div>
                 <h1 className="text-2xl font-bold">{title}</h1>
@@ -52,8 +63,8 @@ export const Modal = ({ children, isOpen, onClose, actions, title }: Modal) => {
                 ))}
               </div>
             )}
-          </div>
-        </>
+          </motion.div>
+        </AnimatePresence>
       ),
       document.body
     )

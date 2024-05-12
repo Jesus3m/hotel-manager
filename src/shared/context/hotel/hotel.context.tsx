@@ -21,6 +21,7 @@ interface HotelContext {
   setBooking: (booking: Booking) => void;
   categories: any[];
   loadingHotels: boolean;
+  loadingHotel: boolean;
   isLoadingRooms: boolean;
 }
 
@@ -31,6 +32,7 @@ export const hotelContext = React.createContext<HotelContext>({
   categories: [],
   hotel: {} as Hotel,
   loadingHotels: true,
+  loadingHotel: true,
   isLoadingRooms: true,
 
   create(hotel) {
@@ -123,7 +125,11 @@ export const HotelProvider: FC<Readonly<{ children: ReactNode }>> = ({
     }
   );
 
-  const { data: hotel, mutate: getById } = useMutation(hotelService.get);
+  const {
+    data: hotel,
+    mutate: getById,
+    isLoading: loadingHotel,
+  } = useMutation(hotelService.get);
 
   const create = (hotel: Hotel) => {
     createHotel(hotel);
@@ -165,6 +171,7 @@ export const HotelProvider: FC<Readonly<{ children: ReactNode }>> = ({
       value={{
         hotels: hotels?.data,
         create,
+        loadingHotel,
         getHotel,
         hotel: hotel?.data || ({} as Hotel),
         update,

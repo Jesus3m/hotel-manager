@@ -18,7 +18,7 @@ export const HotelView = () => {
     <>
       <Booking />
 
-      <main className="flex flex-col items-center justify-between ">
+      <main className="flex flex-col items-center justify-between mb-56">
         <CategorySlide />
         <section className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 p-12 lg:grid-cols-4 w-full">
           {!loadingHotels &&

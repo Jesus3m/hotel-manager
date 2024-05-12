@@ -16,6 +16,7 @@ import { useHotel } from "@/shared/context/hotel/hotel.context";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useCreateHotel } from "./createHotel.hook";
 
 const schema = yup
   .object({
@@ -55,6 +56,7 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
     resolver: yupResolver(schema) as any,
   });
 
+  const { cities, states } = useCreateHotel();
   const { create, update } = useHotel();
 
   const handleAddImage = useCallback(
@@ -91,7 +93,6 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
         } else {
           const form = {
             ...hotel,
-            _id: nanoid(),
             image: images,
           };
           create(form);
@@ -139,6 +140,11 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
           <Input
             label="Departamento"
             placeholder="Bogota"
+            type="select"
+            options={states?.map((state: any) => ({
+              label: state.name,
+              value: state.name,
+            }))}
             error={errors.location?.state?.message}
             {...register("location.state")}
           />
@@ -146,6 +152,11 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
             label="Ciudad"
             placeholder="San Federico"
             error={errors.location?.city?.message}
+            type="select"
+            options={cities?.map((city: any) => ({
+              label: city.name,
+              value: city.name,
+            }))}
             {...register("location.city")}
           />
           <Input
@@ -202,7 +213,7 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
         </div>
         <div>
           <Swiper
-            className="relative"
+            className="relative h-80 flex justify-center items-center rounded-xl m-auto"
             modules={[Navigation]}
             spaceBetween={50}
             slidesPerView={1}
@@ -218,7 +229,10 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
                 >
                   Eliminar
                 </button>
-                <img src={image} className="m-auto w-[50%] object-cover" />
+                <img
+                  src={image}
+                  className="rounded-xl w-full h-full object-contain object-center"
+                />
               </SwiperSlide>
             ))}
           </Swiper>

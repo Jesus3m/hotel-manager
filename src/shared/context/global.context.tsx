@@ -37,7 +37,7 @@ export const GlobalProvider: FC<Readonly<{ children: ReactNode }>> = ({
     onSuccess: (data: Record<string, any>) => {
       setIsAuth(data.data);
       localStorage.setItem("token", data.data.token);
-      if (data.data.role === "admin") {
+      if (data.data.user.role === "admin") {
         router.push("/");
       } else {
         router.push("/booking");

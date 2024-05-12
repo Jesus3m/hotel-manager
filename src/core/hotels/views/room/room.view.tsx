@@ -2,16 +2,19 @@
 
 import { Button } from "@/shared/ui/atoms/button";
 import { Modal } from "@/shared/ui/templates/modal/modal.component";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CreateRoomView } from "./create/create-room.view";
 import { Room } from "../../hotel.interfaces";
 import { useHotel } from "@/shared/context/hotel/hotel.context";
 import { FaEllipsisVertical } from "react-icons/fa6";
 import Dropdown from "@/shared/ui/molecules/dropdown";
+import { useParams } from "next/navigation";
 
 export const RoomView = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [modalData, setModalData] = useState<Room>({} as Room);
+
+  const { id: _id } = useParams();
 
   const { hotel, setRoom } = useHotel();
 

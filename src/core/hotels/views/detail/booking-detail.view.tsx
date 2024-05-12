@@ -5,14 +5,15 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Room } from "@/core/hotels/hotel.interfaces";
 import { Booking } from "@/core/booking/booking.interface";
+import { useParams } from "next/navigation";
 
 export const BookingDetailView = () => {
-  const { hotel } = useHotel();
-
   const [isOpen, setIsOpen] = useState(false);
   const [modalData, setModalData] = useState<Booking & { room: Room }>(
     {} as any
   );
+
+  const { hotel } = useHotel();
 
   return (
     <div className="w-full">

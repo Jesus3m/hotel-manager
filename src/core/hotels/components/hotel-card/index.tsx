@@ -39,7 +39,7 @@ export const HotelCard: FC<Hotel & { toggleModal: () => void }> = ({
         <Swiper
           modules={[Pagination]}
           pagination={{ clickable: true }}
-          className={`rounded-xl h-40 ${
+          className={`rounded-xl h-60 ${
             status === "disabled" ? "opacity-50 blur" : ""
           }`}
         >

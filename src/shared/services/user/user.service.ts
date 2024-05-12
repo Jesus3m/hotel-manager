@@ -9,6 +9,7 @@ export class UserService extends Service<any> {
     await AxiosClient.post("/auth/invite", {
       user: data.email,
       password: data.password,
+      role: data.role,
     });
     return response.data;
   }

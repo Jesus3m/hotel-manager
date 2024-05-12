@@ -9,7 +9,7 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuth && isAuth?.role !== "admin") {
+    if (isAuth && isAuth?.user.role !== "admin") {
       router.push("/booking");
     }
   }, [isAuth]);

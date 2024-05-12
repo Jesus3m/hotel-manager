@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 const schema = yup
   .object({
     name: yup.string().required("El nombre es requerido"),
+    role: yup.string().required("El role es requerido"),
     lastName: yup.string().required("El apellido es requerido"),
     email: yup.string().required("El email es requerido"),
     password: yup
@@ -42,6 +43,25 @@ export default function Register() {
               className="space-y-4 md:space-y-6"
               onSubmit={handleSubmit(registerUser)}
             >
+              <div className="grid grid-cols-1 gap-1">
+                <Input
+                  type="select"
+                  label="Como quieres registrarte?"
+                  placeholder="Huesped"
+                  options={[
+                    {
+                      label: "Huesped",
+                      value: "guest",
+                    },
+                    {
+                      label: "Manager",
+                      value: "admin",
+                    },
+                  ]}
+                  error={errors.name?.message}
+                  {...register("role")}
+                />
+              </div>
               <div className="grid grid-cols-2 gap-1">
                 <Input
                   type="text"
