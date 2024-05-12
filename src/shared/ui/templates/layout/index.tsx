@@ -16,6 +16,7 @@ export const Layout: FC<
       animate={{ x: 0, opacity: 1 }}
       exit={{ scale: 0.8, opacity: 0, x: -0 }}
       transition={{ type: "spring" }}
+      className="text-gray-800"
     >
       <Navigation />
       {children}

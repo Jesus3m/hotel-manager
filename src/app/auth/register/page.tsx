@@ -32,11 +32,11 @@ export default function Register() {
   });
 
   return (
-    <section className=" dark:bg-gray-900">
+    <section className="">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-[calc(100vh-5rem)] lg:py-0">
-        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+        <div className="w-fullbg-white rounded-lg shadow  md:mt-0 sm:max-w-lg xl:p-0  ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
               Crea una cuenta!
             </h1>
             <form
@@ -114,18 +114,15 @@ export default function Register() {
                     id="terms"
                     aria-describedby="terms"
                     type="checkbox"
-                    className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                    className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300dark:focus:ring-primary-60"
                     {...register("terms")}
                   />
                 </div>
                 <div className="ml-3 text-sm">
-                  <label
-                    htmlFor="terms"
-                    className="font-light text-gray-500 dark:text-gray-300"
-                  >
+                  <label htmlFor="terms" className="font-light text-gray-500">
                     Acepto los{" "}
                     <a
-                      className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                      className="font-medium text-primary-600 hover:underline"
                       href="#"
                     >
                       terminos y condiciones
@@ -136,11 +133,11 @@ export default function Register() {
               <Button className="w-full" type="submit">
                 Iniciar!
               </Button>
-              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+              <p className="text-sm font-light text-gray-500 ">
                 Ya tienes una cuenta?{" "}
                 <Link
                   href="/auth/login"
-                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  className="font-medium text-primary-600 hover:underline"
                 >
                   Inicia Sesión aca!
                 </Link>

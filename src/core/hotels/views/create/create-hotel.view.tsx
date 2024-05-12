@@ -114,7 +114,7 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col gap-3 py-4 px-2">
+      <div className="flex flex-col gap-3 py-4 px-2 text-gray-800">
         <h3>Datos generales</h3>
         <Input
           label="Nombre del hotel"
