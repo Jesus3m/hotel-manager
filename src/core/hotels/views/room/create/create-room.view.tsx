@@ -1,8 +1,5 @@
 import { Input } from "@/shared/ui/atoms/input";
 import React, { FC, useCallback, useEffect, useState } from "react";
-import { Navigation } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { nanoid } from "nanoid";
 import { useForm } from "react-hook-form";
 import { useHotel } from "@/shared/context/hotel/hotel.context";
 

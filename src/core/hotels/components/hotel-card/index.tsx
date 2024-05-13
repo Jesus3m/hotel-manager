@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import { Hotel } from "../../hotel.interfaces";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -9,8 +9,8 @@ import Dropdown from "@/shared/ui/molecules/dropdown";
 
 import { FaEllipsisVertical } from "react-icons/fa6";
 import { useHotel } from "@/shared/context/hotel/hotel.context";
-import { useParams, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+
 export const HotelCard: FC<Hotel & { toggleModal: () => void }> = ({
   name,
   image,

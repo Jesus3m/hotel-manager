@@ -18,9 +18,20 @@ Este proyecto es un sistema de gestión de hoteles, habitaciones y reservas que 
   
 - **Framework:** Next.js
   
-- **Base de Datos:** LocalStorage (para almacenamiento local temporal)
+- **Base de Datos:** Todo el sistema es mantenido por una API REST basada en nodejs (express) y una base de datos mongodb
 
 - **Frontend:** React
+
+
+## Detalles técnicos
+- **Rounting**: La aplicacion utiliza un sistema de enrutamiento basado en archivos, en donde la carpeta app representa todas las rutas y subrutas con sus respectivas pages
+
+- **Core**: La carpeta core se encarga de el manejo de las vistas y entidades de la aplicacion, como hoteles y reservas, cada una contiene las respectivas views (Elementos UI representados en las pages), las interfaces que definen los tipos de datos, los componentes utilizados en dichas views (como cards), y en caso de necesitarse, custom hooks para el manejo de logica, estados, y queries.
+
+- **Shared**: Todos los elementos compartidos por la aplicacion van en la carpeta shared, aca encontramos:
+    * UI: Componentes compartidos, basados en atomic design
+    * Services: Clases que manejan la conexion a las apis
+    * Context: Estados globales a la aplicación
 
 ## Instalación
 
