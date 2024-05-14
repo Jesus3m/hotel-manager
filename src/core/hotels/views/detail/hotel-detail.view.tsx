@@ -26,6 +26,15 @@ export const HotelDetailView = () => {
             spaceBetween={20}
             className="h-full flex justify-center items-center rounded-xl m-auto"
           >
+            {!hotel?.image?.length && (
+              <SwiperSlide>
+                <img
+                  src="https://sunrisedaycamp.org/wp-content/uploads/2020/10/placeholder.png"
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+              </SwiperSlide>
+            )}
             {hotel?.image?.map((image) => (
               <SwiperSlide className="m-auto" key={nanoid()}>
                 <img

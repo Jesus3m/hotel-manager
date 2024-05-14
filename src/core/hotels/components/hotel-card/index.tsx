@@ -43,6 +43,15 @@ export const HotelCard: FC<Hotel & { toggleModal: () => void }> = ({
             status === "disabled" ? "opacity-50 blur" : ""
           }`}
         >
+          {!image.length && (
+            <SwiperSlide>
+              <img
+                src="https://sunrisedaycamp.org/wp-content/uploads/2020/10/placeholder.png"
+                alt=""
+                className="w-full h-full object-cover"
+              />
+            </SwiperSlide>
+          )}
           {image.map((image) => (
             <SwiperSlide key={nanoid()}>
               <img src={image} alt="" className="w-full h-full object-cover" />

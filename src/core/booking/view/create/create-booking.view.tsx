@@ -11,7 +11,11 @@ import { Button } from "@/shared/ui/atoms/button";
 import { Room } from "@/core/hotels/hotel.interfaces";
 import { useGlobal } from "@/shared/context/global.context";
 
-const schema = yup.object({}).required();
+const schema = yup
+  .object({
+    guests: yup.array().min(1, "Se requiere al menos un huesped").required(),
+  })
+  .required();
 
 export const CreateBookingView: FC<{
   data: Booking & { room: Room };
@@ -32,7 +36,7 @@ export const CreateBookingView: FC<{
   } = useForm<Booking & { temp: string }>({
     defaultValues: {
       ...data,
-      user: isAuth?.user,
+      ...(!viewMode ? { user: isAuth?.user } : {}),
     },
     resolver: yupResolver(schema) as any,
   });
@@ -137,6 +141,7 @@ export const CreateBookingView: FC<{
         </div>
 
         <h3>Huéspedes</h3>
+        {errors.guests?.message}
         {fields.map((field, index) => (
           <div
             key={field.id}
