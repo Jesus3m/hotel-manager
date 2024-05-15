@@ -9,7 +9,9 @@ export const Input: React.FC<
 > = forwardRef(function MyInput(props, ref: Ref<HTMLInputElement>) {
   return (
     <label htmlFor={props.name} className={`${props.className} relative`}>
-      <span className="absolute text-xs mx-2 mt-1">{props.label}</span>
+      <span className="absolute text-xs mx-2 mt-1 text-gray-700">
+        {props.label}
+      </span>
       {props.type === "select" && (
         <select
           {...(props as any)}

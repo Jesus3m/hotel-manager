@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <QueryClientProvider client={queryClient}>
       <GlobalProvider>
-        <html lang="es" className="overflow-x-hidden">
+        <html lang="es" className="overflow-x-hidden text-gray-700">
           <motion.body>
             <HotelProvider>
               <AnimatePresence key={path}>

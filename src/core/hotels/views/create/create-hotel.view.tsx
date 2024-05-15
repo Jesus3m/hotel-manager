@@ -1,3 +1,4 @@
+// @ts-ignore;
 import { Input } from "@/shared/ui/atoms/input";
 import React, {
   FC,
@@ -49,6 +50,7 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
     handleSubmit,
     getValues,
     setValue,
+    resetField,
     formState: { errors, isValid },
     watch,
   } = useForm<Hotel & { temp: string }>({
@@ -56,7 +58,7 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
     resolver: yupResolver(schema) as any,
   });
 
-  const { cities, states } = useCreateHotel();
+  const { cities, states, onSelectState } = useCreateHotel();
   const { create, update } = useHotel();
 
   const handleAddImage = useCallback(
@@ -69,7 +71,7 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
         );
       if (!validate) return;
       setImages((prev) => [...prev, values.temp as unknown as string]);
-      setValue(`temp`, "");
+      resetField(`temp`);
     },
     [errors]
   );
@@ -102,6 +104,10 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
     },
     [images, data, errors]
   );
+
+  useEffect(() => {
+    onSelectState(getValues("location.state"));
+  }, [watch("location.state"), getValues]);
 
   const handleCategory = (e: any) => {
     if (e.key === "Enter" || e.key === ",") {
@@ -154,8 +160,8 @@ export const CreateHotelView: FC<{ data: Hotel; toggleModal: () => void }> = ({
             error={errors.location?.city?.message}
             type="select"
             options={cities?.map((city: any) => ({
-              label: city.name,
-              value: city.name,
+              label: city,
+              value: city,
             }))}
             {...register("location.city")}
           />

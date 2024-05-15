@@ -3,13 +3,14 @@ import { Booking } from "../booking/booking.interface";
 export interface Hotel {
   _id?: string;
   description?: string;
+  temp?: string;
   name: string;
   image: string[];
   location: Location;
   category?: string[];
   status?: string;
   rooms?: Room[];
-  bookings?: Booking[];
+  bookings?: Partial<Booking[]>;
 }
 
 export interface Room {
@@ -20,7 +21,17 @@ export interface Room {
   name: string;
   type: string;
   taxes: number;
-  hotel?: Partial<Hotel>;
+  hotel?: {
+    _id?: string;
+    description?: string;
+    temp?: string;
+    name: string;
+    image: string[];
+    location: Location;
+    category?: string[];
+    status?: string;
+    bookings?: Partial<Booking[]>;
+  };
   allowedGuests?: number;
   status?: string;
 }

@@ -7,8 +7,37 @@ export interface Booking {
   hotel_id: string;
   room_id: string;
   user_id: string;
-  hotel?: Partial<Hotel>;
-  room?: Partial<Room>;
+  hotel?: {
+    _id?: string;
+    description?: string;
+    temp?: string;
+    name: string;
+    image: string[];
+    location: Location;
+    category?: string[];
+    status?: string;
+  };
+  room?: {
+    _id?: string;
+    hotel_id: string;
+    hotel?: {
+      _id?: string;
+      description?: string;
+      temp?: string;
+      name: string;
+      image: string[];
+      location: Location;
+      category?: string[];
+      status?: string;
+    };
+    location: string;
+    cost: number;
+    name: string;
+    type: string;
+    taxes: number;
+    allowedGuests?: number;
+    status?: string;
+  };
   guests: {
     name: string;
     lastname: string;

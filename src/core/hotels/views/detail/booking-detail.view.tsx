@@ -30,7 +30,7 @@ export const BookingDetailView = () => {
                   setModalData(booking as any);
                   setIsOpen(true);
                 }}
-                key={booking.user.name}
+                key={booking?.user.name}
                 className={`flex rounded-xl justify-between gap-x-6 py-5 px-2 cursor-pointer ${
                   i % 2 ? "bg-gray-200" : ""
                 }`}
@@ -38,18 +38,18 @@ export const BookingDetailView = () => {
                 <div className="flex min-w-0 gap-x-4">
                   <div className="min-w-0 flex-auto">
                     <p className="text-sm font-semibold leading-6 text-gray-900">
-                      {booking.user.name} {booking.user.lastName}
+                      {booking?.user.name} {booking?.user.lastName}
                     </p>
                     <p className="mt-1 truncate text-xs leading-5 text-gray-500">
-                      {booking.guests.length} huespedes
+                      {booking?.guests.length} huespedes
                     </p>
                   </div>
                   <div>
                     <p className="truncate text-xs leading-5 text-gray-500">
-                      Desde: {moment(booking.startDate).format("DD-MM-YYYY")}
+                      Desde: {moment(booking?.startDate).format("DD-MM-YYYY")}
                     </p>
                     <p className="truncate text-xs leading-5 text-gray-500">
-                      Hasta: {moment(booking.endDate).format("DD-MM-YYYY")}
+                      Hasta: {moment(booking?.endDate).format("DD-MM-YYYY")}
                     </p>
                   </div>
                 </div>
@@ -58,10 +58,10 @@ export const BookingDetailView = () => {
                     <p className="text-sm leading-6 text-gray-900">
                       {hotel?.name}
                     </p>
-                    {booking.room ? (
+                    {booking?.room ? (
                       <p className="mt-1 text-xs leading-5 text-gray-500">
                         Habitación: &nbsp;
-                        {booking.room.location} - {booking.room.name}
+                        {booking?.room.location} - {booking?.room.name}
                       </p>
                     ) : (
                       <div className="mt-1 flex items-center gap-x-1.5">

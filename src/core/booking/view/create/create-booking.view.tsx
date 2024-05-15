@@ -10,10 +10,22 @@ import { Booking } from "../../booking.interface";
 import { Button } from "@/shared/ui/atoms/button";
 import { Room } from "@/core/hotels/hotel.interfaces";
 import { useGlobal } from "@/shared/context/global.context";
+import moment from "moment";
 
 const schema = yup
   .object({
     guests: yup.array().min(1, "Se requiere al menos un huesped").required(),
+    startDate: yup
+      .date()
+      .min(new Date(), "La fecha de entrada no puede ser menor de hoy")
+      .required("Fecha es requerida"),
+    endDate: yup
+      .date()
+      .min(
+        yup.ref("startDate"),
+        "La fecha de salida no puede ser menor que la de ingreso"
+      )
+      .required("Fecha es requerida"),
   })
   .required();
 
@@ -64,13 +76,20 @@ export const CreateBookingView: FC<{
   );
 
   useEffect(() => {
-    setValue("startDate", params.get("startDate") as any);
-    setValue("endDate", params.get("endDate") as any);
+    setValue(
+      "startDate",
+      (params.get("startDate") as any) || moment().format("YYYY-MM-DD")
+    );
+    setValue(
+      "endDate",
+      (params.get("endDate") as any) ||
+        moment().add(1, "days").format("YYYY-MM-DD")
+    );
   }, [params]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col gap-3 py-4 px-2">
+      <div className="flex flex-col gap-3 py-4 px-2 text-gray-700">
         <h3>Datos de reserva</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
           <Input
@@ -92,15 +111,13 @@ export const CreateBookingView: FC<{
           <Input
             label="Desde"
             type="date"
-            disabled
             error={errors.startDate?.message}
-            placeholder="25/12/2022"
+            placeholder="25-12-2022"
             {...register("startDate")}
           />
           <Input
             label="Hasta"
             type="date"
-            disabled
             error={errors.endDate?.message}
             placeholder="29/12/2022"
             {...register("endDate")}
@@ -141,7 +158,9 @@ export const CreateBookingView: FC<{
         </div>
 
         <h3>Huéspedes</h3>
-        {errors.guests?.message}
+        {errors.guests?.message && (
+          <p className="text-red-500">{errors.guests?.message}</p>
+        )}
         {fields.map((field, index) => (
           <div
             key={field.id}

@@ -38,7 +38,7 @@ export const Modal = ({ children, isOpen, onClose, actions, title }: Modal) => {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ type: "spring" }}
-            className="absolute w-3/4 left-0 right-0 bottom-0 top-0 m-auto h-max max-h-[90vh] bg-white rounded-lg p-4 z-20 overflow-hidden"
+            className="absolute w-3/4 left-0 right-0 bottom-0 top-0 m-auto h-max max-h-[90vh] bg-white rounded-lg p-4 z-20 overflow-hidden text-gray-700"
           >
             {title && (
               <div>

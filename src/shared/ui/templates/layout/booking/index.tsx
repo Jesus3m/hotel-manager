@@ -12,12 +12,23 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { useQuery } from "react-query";
 import axios from "axios";
+import moment from "moment";
+import { colombia } from "@/shared/services/colombia";
 
 const schema = yup
   .object({
-    location: yup.string().required("El nombre es requerido"),
-    startDate: yup.string().required("Fecha es requerida"),
-    endDate: yup.string().required("Fecha es requerida"),
+    location: yup.string().required("La ubicación es requerida"),
+    startDate: yup
+      .date()
+      .min(new Date(), "La fecha de entrada no puede ser menor de hoy")
+      .required("Fecha es requerida"),
+    endDate: yup
+      .date()
+      .min(
+        yup.ref("startDate"),
+        "La fecha de salida no puede ser menor que la de ingreso"
+      )
+      .required("Fecha es requerida"),
     guests: yup
       .number()
       .min(1, "El número de personas debe ser mayor a 0")
@@ -56,43 +67,32 @@ const inputs = [
   },
 ];
 
-const items = [
-  {
-    id: 0,
-    name: "Cobol",
-  },
-  {
-    id: 1,
-    name: "JavaScript",
-  },
-  {
-    id: 2,
-    name: "Basic",
-  },
-  {
-    id: 3,
-    name: "PHP",
-  },
-  {
-    id: 4,
-    name: "Java",
-  },
-];
 export const Booking = () => {
   const { push } = useRouter();
   const params = useSearchParams();
 
-  const { data: cities } = useQuery(
-    "cities",
-    async () => (await axios.get("https://api-colombia.com/api/v1/City")).data,
-    {}
+  const [cities, setCities] = useState(
+    colombia
+      .map((x) => x.ciudades)
+      .flat(2)
+      .map((x) => ({ name: x, id: nanoid() }))
   );
 
-  const { register, handleSubmit, reset, setValue } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       location: params.get("location")!,
-      startDate: params.get("startDate")!,
-      endDate: params.get("endDate")!,
+      startDate: moment(params.get("startDate") || undefined)
+        .add(1, "days")
+        .format("YYYY-MM-DD") as unknown as Date,
+      endDate: moment(params.get("endDate") || undefined)
+        .add(2, "days")
+        .format("YYYY-MM-DD") as unknown as Date,
       guests: Number(params.get("guests"))!,
     },
     resolver: yupResolver(schema),
@@ -100,7 +100,11 @@ export const Booking = () => {
 
   const handleFilter = (filter: any) => {
     push(
-      `/booking?location=${filter.location}&startDate=${filter.startDate}&endDate=${filter.endDate}&guests=${filter.guests}`
+      `/booking?location=${filter.location}&startDate=${moment(
+        filter.startDate
+      ).format("YYYY-MM-DD")}&endDate=${moment(filter.endDate).format(
+        "YYYY-MM-DD"
+      )}&guests=${filter.guests}`
     );
   };
 
@@ -149,7 +153,6 @@ export const Booking = () => {
                   backgroundColor: "white",
                 }}
                 onSelect={handleOnSelect}
-                autoFocus
                 formatResult={formatResult}
               />
             )
@@ -164,10 +167,10 @@ export const Booking = () => {
             onClick={(e) => {
               e.preventDefault();
               reset({
-                endDate: "",
+                endDate: "" as unknown as Date,
                 location: "",
                 guests: 0,
-                startDate: "",
+                startDate: "" as unknown as Date,
               });
               push("/booking");
             }}
@@ -178,6 +181,13 @@ export const Booking = () => {
           </button>
         </div>
       </form>
+      <div className="flex flex-col gap-2">
+        {Object.values(errors).map((error) => (
+          <span key={error.message} className="text-red-500">
+            {error.message}
+          </span>
+        ))}
+      </div>
       <div className=" bg-gray-300 h-0.5 m-5"></div>
     </>
   );
